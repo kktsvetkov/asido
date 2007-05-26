@@ -357,7 +357,7 @@ Class Asido_Driver_Imagick_Shell Extends Asido_Driver_Shell {
 		//
 		$cmd = $this->__command(
 			'convert',
-                	"-size {$width}x{$height} xc:rgb($r,$g,$b) PNG:"
+                	"-size {$width}x{$height} " . escapeshellarg("xc:rgb($r,$g,$b)") . " PNG:"
                 		. escapeshellarg(realpath($t->target))
                 	);
                 exec($cmd, $result, $errors);
