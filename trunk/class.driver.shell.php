@@ -10,6 +10,30 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+* Set the ASIDO_NICE_LEVEL constant up w/ the nice level (for *nix systems) for 
+* the priority of shell commands. The allowed values are 1 to 19, where 19 is the 
+* lowest priority. Providing 0 as nice level will disable calling nice at all 
+* and the shell command will be called without using it.
+*/
+if (!defined('ASIDO_NICE_LEVEL')) {
+	define('ASIDO_NICE_LEVEL', '0');
+	}
+
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+/**
+* Set the ASIDO_START_PRIORITY constant up w/ the process priority level (for 
+* windows-based systems). The allowed values are 'LOW', 'NORMAL', 'HIGH', 
+* 'REALTIME', 'ABOVENORMAL' and 'BELOWNORMAL'. Any other value will disable this 
+* feature and the shell command will be called without using this feature.
+*/
+if (!defined('ASIDO_START_PRIORITY')) {
+	define('ASIDO_START_PRIORITY', 'NORMAL');
+	}
+
+/////////////////////////////////////////////////////////////////////////////
+
+/**
 * Common file for all "shell" based solutions 
 *
 * @package Asido
@@ -86,7 +110,32 @@ Class Asido_Driver_Shell Extends Asido_Driver {
 	* @access protected
 	*/
 	function __command($program, $args = '') {
-		return $this->__exec . $program . ' ' . $args;
+
+		$priority_prefix = '';
+
+		if (!OS_WINDOWS) {
+			
+			// Windows systems
+			//
+			$allowed_priorities = array(
+				'LOW', 'NORMAL', 'HIGH', 'REALTIME', 'ABOVENORMAL', 'BELOWNORMAL'
+				);
+			$start_priority = strToUpper(ASIDO_START_PRIORITY);
+			if (in_array($start_priority, $allowed_priorities)) {
+				$priority_prefix = "start /B /{$start_priority} ";
+				}
+			
+			} else {
+
+			// *Nix system
+			//
+			$nice_level = intval(ASIDO_NICE_LEVEL);
+			if($nice_level <= 19 && $nice_level > 0) {
+				$priority_prefix = "nice -$nice_level ";
+				}
+			}
+
+		return $priority_prefix . $this->__exec . $program . ' ' . $args;
 		}
 	
 	// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 

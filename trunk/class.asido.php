@@ -1,6 +1,6 @@
 <?php
 /**
-* Asido Imate Resizing Solution
+* Asido Image Resizing Solution
 *
 * Asido is a PHP (PHP4/PHP5) image processing solution
 *
@@ -13,6 +13,22 @@
 */
 
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+* backward compatibility for OS_WINDOWS constant
+*/
+if (!defined('OS_WINDOWS')) {
+	define('OS_WINDOWS', strToUpper(subStr(PHP_OS, 0, 3)) === 'WIN');
+	}
+
+/**
+* backward compatibility for OS_UNIX constant
+*/
+if (!defined('OS_UNIX')) {
+	define('OS_UNIX', !OS_WINDOWS);
+	}
+
+// -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
 /**
 * backward compatibility: the DIR_SEP constant isn't used anymore
