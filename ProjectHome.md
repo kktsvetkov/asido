@@ -1,0 +1,1 @@
+Asido is a PHP (PHP4/PHP5) image processing solution, with “pluggable” drivers(adapters) for virtually any environment: GD2, Magick Wand, Image Magick via shell, Image Magick via extension, etc
